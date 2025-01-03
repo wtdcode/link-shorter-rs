@@ -9,7 +9,7 @@ COPY Cargo.toml /work/
 
 RUN cargo build --release && cp target/release/link-shorter-rs /usr/bin/
 
-FROM rust:bookwork as runner
+FROM rust:bookworm as runner
 
 COPY --from=builder /usr/bin/link-shorter-rs /usr/bin/link-shorter-rs
 
