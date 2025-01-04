@@ -2,7 +2,6 @@ use color_eyre::Result;
 
 use crate::token::{convert_to_ttl, ttl_expired};
 
-
 #[derive(Debug, Clone)]
 pub struct Shorter {
     pub path: String,
@@ -17,7 +16,7 @@ pub fn locate_shorter(conn: &rusqlite::Connection, path: &str) -> Result<Option<
             Ok(Shorter {
                 path: r.get(0)?,
                 url: r.get(1)?,
-                ttl: r.get(2)?
+                ttl: r.get(2)?,
             })
         })?
         .collect::<Result<Vec<Shorter>, _>>()?;
@@ -49,11 +48,20 @@ pub fn remove_shorter(conn: &rusqlite::Connection, path: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn insert_shorter(conn: &rusqlite::Connection, path: &str, url: &str, seconds: Option<i64>) -> Result<()> {
+pub fn insert_shorter(
+    conn: &rusqlite::Connection,
+    token: &str,
+    path: &str,
+    url: &str,
+    seconds: Option<i64>,
+) -> Result<()> {
     let ttl = seconds.map(|t| convert_to_ttl(t));
     if locate_shorter(conn, path)?.is_some() {
         remove_shorter(conn, path)?;
     }
-    conn.execute("INSERT INTO shorters VALUES (NULL, ?1, ?2, ?3)", (path, url, ttl))?;
+    conn.execute(
+        "INSERT INTO shorters VALUES (NULL, ?1, ?2, ?3, ?4)",
+        (path, token, url, ttl),
+    )?;
     Ok(())
 }

@@ -1,5 +1,0 @@
-Hello Strangers!
-
-This is a link shorter service, contact mio@lazym.io if you would like to get access.
-
-For source, see https://github.com/wtdcode/link-shorter-rs and you could also host one.

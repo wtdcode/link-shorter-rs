@@ -8,9 +8,9 @@ use log::warn;
 use serve::{serve_main, ServeCommand};
 use token::{add_token, list_token, locate_token, remove_token, ttl_expired};
 
+mod serve;
 mod shorter;
 mod token;
-mod serve;
 
 #[derive(Debug, Clone, Parser)]
 struct LinkShorterCli {
@@ -28,8 +28,6 @@ enum ShorterCommand {
     #[command(name = "list-token")]
     ListToken(ListTokenComamnd),
 }
-
-
 
 #[derive(Debug, Clone, Args)]
 struct AddTokenComamnd {
@@ -63,6 +61,7 @@ fn create_table(conn: &rusqlite::Connection) -> Result<()> {
         "CREATE TABLE IF NOT EXISTS shorters (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         path TEXT NOT NULL UNIQUE,
+        token TEXT NOT NULL,
         url TEXT NOT NULL,
         ttl INTEGER
     );",

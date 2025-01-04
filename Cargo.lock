@@ -789,6 +789,7 @@ dependencies = [
  "log",
  "rand",
  "rusqlite",
+ "serde",
  "tokio",
  "url",
  "urlencoding",
